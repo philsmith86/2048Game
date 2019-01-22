@@ -19,12 +19,7 @@ namespace _2048Game
             { "tile-filled", Color.FromArgb(238,228,218) },
         };
         
-        //Game vars
-        private int rows = 4;
-        private int columns = 4;
         private GameManager gameManager;
-        private int playerScore = 0;
-
         Control grid;
         Control playerScoreText;
         Control highScoreText;
@@ -44,7 +39,6 @@ namespace _2048Game
 
         private void NewGame()
         {
-            playerScore = 0;
             gameManager.Init();
 
             //Get the first 2 random tiles and update the grid ui
@@ -77,8 +71,38 @@ namespace _2048Game
                 }
             }
 
-            playerScoreLabel.Text = "Score: " + gameManager.GetPlayerScore().ToString();
-            highScoreText.Text = "Best: " + gameManager.GetHighScore();
+            var playerScore = gameManager.GetPlayerScore();
+            var highScore = gameManager.GetHighScore();
+
+            playerScoreLabel.Text = "Score: " + playerScore.ToString();
+            highScoreText.Text = "Best: " + highScore.ToString();
+
+            //Check for game completion
+            if (playerScore >= 2048)
+            {
+                if (playerScore > highScore)
+                {
+                    gameManager.SetHighScore(playerScore);
+                }
+                MessageBox.Show("You Won!");
+            }
+
+            //Check for next move
+            if (!gameManager.CanMakeNextMove())
+            {
+                if (playerScore > highScore)
+                {
+                    gameManager.SetHighScore(playerScore);
+                }
+
+                //Game Over
+                var result = MessageBox.Show("Game Over!", "Game Over", MessageBoxButtons.OK);
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    NewGame();
+                }
+            }
+
         }
 
         private void startButton_Click(object sender, EventArgs e)

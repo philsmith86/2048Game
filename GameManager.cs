@@ -37,6 +37,7 @@ namespace _2048Game
                     vGrid[i][j] = 0;
                 }
             }
+            
             playerScore = 0;
         }
 
@@ -75,54 +76,80 @@ namespace _2048Game
             return gridSpaces[randomIndex];
         }
 
+        private int[][] GetGridForGameLogic(bool simulate)
+        {
+            if (simulate)
+            {
+                int[][] simulationGrid = new int[][]
+                {
+                    new int[] { 0,0,0,0 },
+                    new int[] { 0,0,0,0 },
+                    new int[] { 0,0,0,0 },
+                    new int[] { 0,0,0,0 },
+                };
+
+                for (int r = 0; r<vGrid.Length; r++)
+                {
+                    for (int c = 0; c<vGrid[r].Length; c++)
+                    {
+                        simulationGrid[r][c] = vGrid[r][c];
+                    }
+                }
+
+                return simulationGrid;
+            }
+            return vGrid;
+        }
+
         //Moves tiles in the specified direction
-        public bool MoveTilesUp()
+        public bool MoveTilesUp(bool simulate = false)
         {
 
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
+            var grid = GetGridForGameLogic(simulate);
 
-            for (int c = 0; c < vGrid[0].Length; c++)
+            for (int c = 0; c < grid[0].Length; c++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int r = 0; r<vGrid.Length; r++)
+                for (int r = 0; r<grid.Length; r++)
                 {
 
-                    if (vGrid[r][c] == lastValue[2])
+                    if (grid[r][c] == lastValue[2])
                     {
                         //Combine
                         var lr = lastValue[0];
                         var lc = lastValue[1];
 
-                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
-                        vGrid[r][c] = 0;
+                        grid[lr][lc] = grid[lr][lc] * 2;
+                        grid[r][c] = 0;
                         lastValue[2] = -1;
                         madeChanges = true;
 
-                        UpdatePlayerScore(vGrid[lr][lc]);
+                        UpdatePlayerScore(grid[lr][lc]);
 
                     }
-                    else if (vGrid[r][c] > 0)
+                    else if (grid[r][c] > 0)
                     {
                         //No match, update value
                         lastValue[0] = r;
                         lastValue[1] = c;
-                        lastValue[2] = vGrid[r][c];
+                        lastValue[2] = grid[r][c];
                     }
                 }
 
                 //Move
-                for (int r = 0; r<vGrid.Length; r++)
+                for (int r = 0; r<grid.Length; r++)
                 {
-                    if (vGrid[r][c] > 0)
+                    if (grid[r][c] > 0)
                     {
-                        var newRow = GetEmptyRowSpace(c, 1);
+                        var newRow = GetEmptyRowSpace(grid, c, 1);
                         if (newRow > -1 && newRow <r)
                         {
-                            vGrid[newRow][c] = vGrid[r][c];
-                            vGrid[r][c] = 0;
+                            grid[newRow][c] = grid[r][c];
+                            grid[r][c] = 0;
                             madeChanges = true;
                         }
                     }
@@ -132,52 +159,53 @@ namespace _2048Game
             return madeChanges;
         }
 
-        public bool MoveTilesDown()
+        public bool MoveTilesDown(bool simulate = false)
         {
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
+            var grid = GetGridForGameLogic(simulate);
 
-            for (int c = 0; c < vGrid[0].Length; c++)
+            for (int c = 0; c < grid[0].Length; c++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int r = vGrid.Length - 1; r >= 0; r--)
+                for (int r = grid.Length - 1; r >= 0; r--)
                 {
 
-                    if (vGrid[r][c] == lastValue[2])
+                    if (grid[r][c] == lastValue[2])
                     {
                         //Combine
                         var lr = lastValue[0];
                         var lc = lastValue[1];
 
-                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
-                        vGrid[r][c] = 0;
+                        grid[lr][lc] = grid[lr][lc] * 2;
+                        grid[r][c] = 0;
                         lastValue[2] = -1;
                         madeChanges = true;
 
-                        UpdatePlayerScore(vGrid[lr][lc]);
+                        UpdatePlayerScore(grid[lr][lc]);
 
                     }
-                    else if (vGrid[r][c] > 0)
+                    else if (grid[r][c] > 0)
                     {
                         //No match, update value
                         lastValue[0] = r;
                         lastValue[1] = c;
-                        lastValue[2] = vGrid[r][c];
+                        lastValue[2] = grid[r][c];
                     }
                 }
 
                 //Move
-                for (int r = vGrid.Length - 1; r >= 0; r--)
+                for (int r = grid.Length - 1; r >= 0; r--)
                 {
-                    if (vGrid[r][c] > 0)
+                    if (grid[r][c] > 0)
                     {
-                        var newRow = GetEmptyRowSpace(c, -1);
+                        var newRow = GetEmptyRowSpace(grid, c, -1);
                         if (newRow > r)
                         {
-                            vGrid[newRow][c] = vGrid[r][c];
-                            vGrid[r][c] = 0;
+                            grid[newRow][c] = grid[r][c];
+                            grid[r][c] = 0;
                             madeChanges = true;
                         }
                     }
@@ -187,52 +215,53 @@ namespace _2048Game
             return madeChanges;
         }
 
-        public bool MoveTilesLeft()
+        public bool MoveTilesLeft(bool simulate = false)
         {
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
+            var grid = GetGridForGameLogic(simulate);
 
-            for (int r = 0; r < vGrid.Length; r++)
+            for (int r = 0; r < grid.Length; r++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int c = 0; c<vGrid.Length; c++)
+                for (int c = 0; c<grid.Length; c++)
                 {
 
-                    if (vGrid[r][c] == lastValue[2])
+                    if (grid[r][c] == lastValue[2])
                     {
                         //Combine
                         var lr = lastValue[0];
                         var lc = lastValue[1];
 
-                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
-                        vGrid[r][c] = 0;
+                        grid[lr][lc] = grid[lr][lc] * 2;
+                        grid[r][c] = 0;
                         lastValue[2] = -1;
                         madeChanges = true;
 
-                        UpdatePlayerScore(vGrid[lr][lc]);
+                        UpdatePlayerScore(grid[lr][lc]);
 
                     }
-                    else if (vGrid[r][c] > 0)
+                    else if (grid[r][c] > 0)
                     {
                         //No match, update value
                         lastValue[0] = r;
                         lastValue[1] = c;
-                        lastValue[2] = vGrid[r][c];
+                        lastValue[2] = grid[r][c];
                     }
                 }
 
                 //Move
-                for (int c =0; c<vGrid.Length; c++)
+                for (int c =0; c<grid.Length; c++)
                 {
-                    if (vGrid[r][c] > 0)
+                    if (grid[r][c] > 0)
                     {
-                        var newCol = GetEmptyColumnSpace(r, 1);
+                        var newCol = GetEmptyColumnSpace(grid, r, 1);
                         if (newCol > -1 && newCol<c)
                         {
-                            vGrid[r][newCol] = vGrid[r][c];
-                            vGrid[r][c] = 0;
+                            grid[r][newCol] = grid[r][c];
+                            grid[r][c] = 0;
                             madeChanges = true;
                         }
                     }
@@ -242,52 +271,53 @@ namespace _2048Game
             return madeChanges;
         }
 
-        public bool MoveTilesRight()
+        public bool MoveTilesRight(bool simulate = false)
         {
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
+            var grid = GetGridForGameLogic(simulate);
 
-            for (int r = 0; r < vGrid.Length; r++)
+            for (int r = 0; r < grid.Length; r++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int c = vGrid.Length - 1; c >= 0; c--)
+                for (int c = grid.Length - 1; c >= 0; c--)
                 {
 
-                    if (vGrid[r][c] == lastValue[2])
+                    if (grid[r][c] == lastValue[2])
                     {
                         //Combine
                         var lr = lastValue[0];
                         var lc = lastValue[1];
 
-                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
-                        vGrid[r][c] = 0;
+                        grid[lr][lc] = grid[lr][lc] * 2;
+                        grid[r][c] = 0;
                         lastValue[2] = -1;
                         madeChanges = true;
 
-                        UpdatePlayerScore(vGrid[lr][lc]);
+                        UpdatePlayerScore(grid[lr][lc]);
 
                     }
-                    else if (vGrid[r][c] > 0)
+                    else if (grid[r][c] > 0)
                     {
                         //No match, update value
                         lastValue[0] = r;
                         lastValue[1] = c;
-                        lastValue[2] = vGrid[r][c];
+                        lastValue[2] = grid[r][c];
                     }
                 }
 
                 //Move
-                for (int c = vGrid.Length - 1; c >= 0; c--)
+                for (int c = grid.Length - 1; c >= 0; c--)
                 {
-                    if (vGrid[r][c] > 0)
+                    if (grid[r][c] > 0)
                     {
-                        var newCol = GetEmptyColumnSpace(r, -1);
+                        var newCol = GetEmptyColumnSpace(grid, r, -1);
                         if (newCol > c)
                         {
-                            vGrid[r][newCol] = vGrid[r][c];
-                            vGrid[r][c] = 0;
+                            grid[r][newCol] = grid[r][c];
+                            grid[r][c] = 0;
                             madeChanges = true;
                         }
                     }
@@ -297,20 +327,20 @@ namespace _2048Game
             return madeChanges;
         }
 
-        private int GetEmptyColumnSpace(int row, int direction)
+        private int GetEmptyColumnSpace(int[][] grid, int row, int direction)
         {
             var start = 0;
-            var end = vGrid[row].Length-1;
+            var end = grid[row].Length-1;
 
             if (direction < 0)
             {
-                start = vGrid[row].Length - 1;
+                start = grid[row].Length - 1;
                 end = 0;
             }
             
             for (int c = start;  c!=end; c+=direction)
             {
-                if (vGrid[row][c] == 0)
+                if (grid[row][c] == 0)
                 {
                     return c;
                 }
@@ -318,20 +348,20 @@ namespace _2048Game
             return -1;
         }
 
-        private int GetEmptyRowSpace(int col, int direction)
+        private int GetEmptyRowSpace(int[][] grid, int col, int direction)
         {
             var start = 0;
-            var end = vGrid.Length - 1;
+            var end = grid.Length - 1;
 
             if (direction < 0)
             {
-                start = vGrid.Length - 1;
+                start = grid.Length - 1;
                 end = 0;
             }
 
             for (int r = start; r != end; r += direction)
             {
-                if (vGrid[r][col] == 0)
+                if (grid[r][col] == 0)
                 {
                     return r;
                 }
@@ -339,20 +369,16 @@ namespace _2048Game
             return -1;
         }
 
-
-        //Returns current vGrid
         public int[][] GetGrid()
         {
             return vGrid;
         }
 
-        //Returns player score
         public int GetPlayerScore()
         {
             return playerScore;
         }
 
-        //Returns High score
         public int GetHighScore()
         {
             return highScore;
@@ -363,5 +389,9 @@ namespace _2048Game
             highScoreManager.SaveHighScore(highScore);
         }
 
+        public bool CanMakeNextMove()
+        {
+            return MoveTilesDown(true) || MoveTilesUp(true) || MoveTilesLeft(true) || MoveTilesRight(true);
+        }
     }
 }
