@@ -23,9 +23,11 @@ namespace _2048Game
         private int rows = 4;
         private int columns = 4;
         private GameManager gameManager;
-        Control grid;
         private int playerScore = 0;
 
+        Control grid;
+        Control playerScoreText;
+        Control highScoreText;
 
         public Game()
         {
@@ -34,6 +36,8 @@ namespace _2048Game
             gameManager = new GameManager();
 
             grid = this.Controls["gameGrid"];
+            playerScoreText = this.Controls["playerScoreLabel"];
+            highScoreText = this.Controls["highScoreLabel"];
 
             NewGame();
         }
@@ -46,11 +50,11 @@ namespace _2048Game
             //Get the first 2 random tiles and update the grid ui
             gameManager.AddRandomTile();
             gameManager.AddRandomTile();
-            UpdateGridUi();
+            UpdateUi();
 
         }
 
-        private void UpdateGridUi()
+        private void UpdateUi()
         {
             int[][] vGrid = gameManager.GetGrid();
 
@@ -72,6 +76,9 @@ namespace _2048Game
 
                 }
             }
+
+            playerScoreLabel.Text = "Score: " + gameManager.GetPlayerScore().ToString();
+            highScoreText.Text = "Best: " + gameManager.GetHighScore();
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -86,25 +93,29 @@ namespace _2048Game
                 case "w":
                     if (gameManager.MoveTilesUp())
                     {
-                        UpdateGridUi();
+                        gameManager.AddRandomTile();
+                        UpdateUi();
                     }
                     break;
                 case "s":
                     if (gameManager.MoveTilesDown())
                     {
-                        UpdateGridUi();
+                        gameManager.AddRandomTile();
+                        UpdateUi();
                     }
                     break;
                 case "a":
                     if (gameManager.MoveTilesLeft())
                     {
-                        UpdateGridUi();
+                        gameManager.AddRandomTile();
+                        UpdateUi();
                     }
                     break;
                 case "d":
                     if (gameManager.MoveTilesRight())
                     {
-                        UpdateGridUi();
+                        gameManager.AddRandomTile();
+                        UpdateUi();
                     }
                     break;
             }

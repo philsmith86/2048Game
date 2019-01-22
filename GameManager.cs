@@ -11,6 +11,15 @@ namespace _2048Game
         private int playerScore = 0;
         Random rand = new Random();
 
+        private HighScore highScoreManager;
+        private int highScore;
+
+        public GameManager()
+        {
+            highScoreManager = new HighScore();
+            highScore = highScoreManager.GetHighScore();
+        }
+
         //Virtual Grid to track pieces
         private int[][] vGrid = new int[][]
         {
@@ -29,6 +38,11 @@ namespace _2048Game
                 }
             }
             playerScore = 0;
+        }
+
+        private void UpdatePlayerScore(int byVal)
+        {
+            playerScore += byVal;
         }
 
         //Returns random tile row & col
@@ -87,6 +101,8 @@ namespace _2048Game
                         lastValue[2] = -1;
                         madeChanges = true;
 
+                        UpdatePlayerScore(vGrid[lr][lc]);
+
                     }
                     else if (vGrid[r][c] > 0)
                     {
@@ -103,7 +119,7 @@ namespace _2048Game
                     if (vGrid[r][c] > 0)
                     {
                         var newRow = GetEmptyRowSpace(c, 1);
-                        if (newRow > -1)
+                        if (newRow > -1 && newRow <r)
                         {
                             vGrid[newRow][c] = vGrid[r][c];
                             vGrid[r][c] = 0;
@@ -140,6 +156,8 @@ namespace _2048Game
                         lastValue[2] = -1;
                         madeChanges = true;
 
+                        UpdatePlayerScore(vGrid[lr][lc]);
+
                     }
                     else if (vGrid[r][c] > 0)
                     {
@@ -156,7 +174,7 @@ namespace _2048Game
                     if (vGrid[r][c] > 0)
                     {
                         var newRow = GetEmptyRowSpace(c, -1);
-                        if (newRow > -1)
+                        if (newRow > r)
                         {
                             vGrid[newRow][c] = vGrid[r][c];
                             vGrid[r][c] = 0;
@@ -193,6 +211,8 @@ namespace _2048Game
                         lastValue[2] = -1;
                         madeChanges = true;
 
+                        UpdatePlayerScore(vGrid[lr][lc]);
+
                     }
                     else if (vGrid[r][c] > 0)
                     {
@@ -209,7 +229,7 @@ namespace _2048Game
                     if (vGrid[r][c] > 0)
                     {
                         var newCol = GetEmptyColumnSpace(r, 1);
-                        if (newCol > -1)
+                        if (newCol > -1 && newCol<c)
                         {
                             vGrid[r][newCol] = vGrid[r][c];
                             vGrid[r][c] = 0;
@@ -246,6 +266,8 @@ namespace _2048Game
                         lastValue[2] = -1;
                         madeChanges = true;
 
+                        UpdatePlayerScore(vGrid[lr][lc]);
+
                     }
                     else if (vGrid[r][c] > 0)
                     {
@@ -262,7 +284,7 @@ namespace _2048Game
                     if (vGrid[r][c] > 0)
                     {
                         var newCol = GetEmptyColumnSpace(r, -1);
-                        if (newCol > -1)
+                        if (newCol > c)
                         {
                             vGrid[r][newCol] = vGrid[r][c];
                             vGrid[r][c] = 0;
@@ -322,6 +344,23 @@ namespace _2048Game
         public int[][] GetGrid()
         {
             return vGrid;
+        }
+
+        //Returns player score
+        public int GetPlayerScore()
+        {
+            return playerScore;
+        }
+
+        //Returns High score
+        public int GetHighScore()
+        {
+            return highScore;
+        }
+
+        public void SetHighScore(int highScore)
+        {
+            highScoreManager.SaveHighScore(highScore);
         }
 
     }

@@ -62,8 +62,8 @@
             this.label_4_4 = new System.Windows.Forms.Label();
             this.gameGrid = new System.Windows.Forms.TableLayoutPanel();
             this.startButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.playerScoreLabel = new System.Windows.Forms.Label();
+            this.highScoreLabel = new System.Windows.Forms.Label();
             this.tile_1_1.SuspendLayout();
             this.tile_1_2.SuspendLayout();
             this.tile_1_3.SuspendLayout();
@@ -460,7 +460,7 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(27, 25);
+            this.startButton.Location = new System.Drawing.Point(391, 25);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(162, 75);
             this.startButton.TabIndex = 16;
@@ -468,29 +468,29 @@
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
-            // label1
+            // playerScoreLabel
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(414, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(136, 37);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Score: 0";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.playerScoreLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.playerScoreLabel.AutoSize = true;
+            this.playerScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playerScoreLabel.Location = new System.Drawing.Point(24, 25);
+            this.playerScoreLabel.Name = "playerScoreLabel";
+            this.playerScoreLabel.Size = new System.Drawing.Size(136, 37);
+            this.playerScoreLabel.TabIndex = 17;
+            this.playerScoreLabel.Text = "Score: 0";
+            this.playerScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // highScoreLabel
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(434, 63);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 37);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Best: 0";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.highScoreLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.highScoreLabel.AutoSize = true;
+            this.highScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.highScoreLabel.Location = new System.Drawing.Point(24, 63);
+            this.highScoreLabel.Name = "highScoreLabel";
+            this.highScoreLabel.Size = new System.Drawing.Size(116, 37);
+            this.highScoreLabel.TabIndex = 18;
+            this.highScoreLabel.Text = "Best: 0";
+            this.highScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Game
             // 
@@ -498,8 +498,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(238)))));
             this.ClientSize = new System.Drawing.Size(581, 593);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.highScoreLabel);
+            this.Controls.Add(this.playerScoreLabel);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.gameGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -566,8 +566,8 @@
         private System.Windows.Forms.Label label_4_3;
         private System.Windows.Forms.Label label_4_4;
         private System.Windows.Forms.Button startButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label playerScoreLabel;
+        private System.Windows.Forms.Label highScoreLabel;
     }
 }
 
