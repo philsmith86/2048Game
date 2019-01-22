@@ -8,6 +8,7 @@ namespace _2048Game
 {
     class GameManager
     {
+        private int playerScore = 0;
         Random rand = new Random();
 
         //Virtual Grid to track pieces
@@ -18,15 +19,16 @@ namespace _2048Game
             new int[] { 0,0,0,0 },
             new int[] { 0,0,0,0 },
         };
-        
+
         //Resets vGrid
         public void Init()
         {
-            for (int i = 0; i<vGrid.Length; i++){
-                for (int j = 0; j<vGrid[i].Length; j++){
+            for (int i = 0; i < vGrid.Length; i++) {
+                for (int j = 0; j < vGrid[i].Length; j++) {
                     vGrid[i][j] = 0;
                 }
             }
+            playerScore = 0;
         }
 
         //Returns random tile row & col
@@ -60,26 +62,144 @@ namespace _2048Game
         }
 
         //Moves tiles in the specified direction
-        public void MoveTilesUp()
+        public bool MoveTilesUp()
         {
 
+            return true;
         }
 
-        public void MoveTilesDown()
+        public bool MoveTilesDown()
         {
-
+            return true;
         }
 
-        public void MoveTilesLeft()
+        public bool MoveTilesLeft()
         {
+            int[] lastValue = new int[] { 0, 0, -1 };
+            var madeChanges = false;
 
+            for (int r = 0; r < vGrid.Length; r++)
+            {
+                //Merge 
+                lastValue[2] = -1;
+
+                for (int c = 0; c<vGrid.Length; c++)
+                {
+
+                    if (vGrid[r][c] == lastValue[2])
+                    {
+                        //Combine
+                        var lr = lastValue[0];
+                        var lc = lastValue[1];
+
+                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
+                        vGrid[r][c] = 0;
+                        lastValue[2] = -1;
+                        madeChanges = true;
+
+                    }
+                    else if (vGrid[r][c] > 0)
+                    {
+                        //No match, update value
+                        lastValue[0] = r;
+                        lastValue[1] = c;
+                        lastValue[2] = vGrid[r][c];
+                    }
+                }
+
+                //Move
+                for (int c =0; c<vGrid.Length; c++)
+                {
+                    if (vGrid[r][c] > 0)
+                    {
+                        var newCol = GetEmptyColumnSpace(r, 1);
+                        if (newCol > -1)
+                        {
+                            vGrid[r][newCol] = vGrid[r][c];
+                            vGrid[r][c] = 0;
+                            madeChanges = true;
+                        }
+                    }
+                }
+            }
+
+            return madeChanges;
         }
 
-        public void MoveTilesRight()
+        public bool MoveTilesRight()
         {
+            int[] lastValue = new int[] { 0, 0, -1 };
+            var madeChanges = false;
 
+            for (int r = 0; r < vGrid.Length; r++)
+            {
+                //Merge 
+                lastValue[2] = -1;
+
+                for (int c = vGrid.Length - 1; c >= 0; c--)
+                {
+
+                    if (vGrid[r][c] == lastValue[2])
+                    {
+                        //Combine
+                        var lr = lastValue[0];
+                        var lc = lastValue[1];
+
+                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
+                        vGrid[r][c] = 0;
+                        lastValue[2] = -1;
+                        madeChanges = true;
+
+                    }
+                    else if (vGrid[r][c] > 0)
+                    {
+                        //No match, update value
+                        lastValue[0] = r;
+                        lastValue[1] = c;
+                        lastValue[2] = vGrid[r][c];
+                    }
+                }
+
+                //Move
+                for (int c = vGrid.Length - 1; c >= 0; c--)
+                {
+                    if (vGrid[r][c] > 0)
+                    {
+                        var newCol = GetEmptyColumnSpace(r, -1);
+                        if (newCol > -1)
+                        {
+                            vGrid[r][newCol] = vGrid[r][c];
+                            vGrid[r][c] = 0;
+                            madeChanges = true;
+                        }
+                    }
+                }
+            }
+
+            return madeChanges;
         }
 
+        private int GetEmptyColumnSpace(int row, int direction)
+        {
+            var start = 0;
+            var end = vGrid[row].Length-1;
+
+            if (direction < 0)
+            {
+                start = vGrid[row].Length - 1;
+                end = 0;
+            }
+            
+            for (int c = start;  c!=end; c+=direction)
+            {
+                Console.WriteLine(c);
+                if (vGrid[row][c] == 0)
+                {
+                    return c;
+                }
+            }
+            return -1;
+        }
 
 
         //Returns current vGrid

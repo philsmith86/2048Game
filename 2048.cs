@@ -81,7 +81,33 @@ namespace _2048Game
 
         private void Game_KeyPress(object sender, KeyPressEventArgs e)
         {
-           Console.WriteLine(e.KeyChar.ToString());
+            switch (e.KeyChar.ToString())
+            {
+                case "w":
+                    if (gameManager.MoveTilesUp())
+                    {
+                        UpdateGridUi();
+                    }
+                    break;
+                case "s":
+                    if (gameManager.MoveTilesDown())
+                    {
+                        UpdateGridUi();
+                    }
+                    break;
+                case "a":
+                    if (gameManager.MoveTilesLeft())
+                    {
+                        UpdateGridUi();
+                    }
+                    break;
+                case "d":
+                    if (gameManager.MoveTilesRight())
+                    {
+                        UpdateGridUi();
+                    }
+                    break;
+            }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
