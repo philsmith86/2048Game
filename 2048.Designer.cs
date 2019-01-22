@@ -64,6 +64,7 @@
             this.startButton = new System.Windows.Forms.Button();
             this.playerScoreLabel = new System.Windows.Forms.Label();
             this.highScoreLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.tile_1_1.SuspendLayout();
             this.tile_1_2.SuspendLayout();
             this.tile_1_3.SuspendLayout();
@@ -485,12 +486,21 @@
             this.highScoreLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.highScoreLabel.AutoSize = true;
             this.highScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.highScoreLabel.Location = new System.Drawing.Point(24, 63);
+            this.highScoreLabel.Location = new System.Drawing.Point(24, 59);
             this.highScoreLabel.Name = "highScoreLabel";
             this.highScoreLabel.Size = new System.Drawing.Size(116, 37);
             this.highScoreLabel.TabIndex = 18;
             this.highScoreLabel.Text = "Best: 0";
             this.highScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(28, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(150, 13);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Use w,a,s,d keys to move tiles";
             // 
             // Game
             // 
@@ -498,6 +508,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(238)))));
             this.ClientSize = new System.Drawing.Size(581, 593);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.highScoreLabel);
             this.Controls.Add(this.playerScoreLabel);
             this.Controls.Add(this.startButton);
@@ -568,6 +579,7 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label playerScoreLabel;
         private System.Windows.Forms.Label highScoreLabel;
+        private System.Windows.Forms.Label label1;
     }
 }
 
