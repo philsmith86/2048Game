@@ -65,12 +65,108 @@ namespace _2048Game
         public bool MoveTilesUp()
         {
 
-            return true;
+            int[] lastValue = new int[] { 0, 0, -1 };
+            var madeChanges = false;
+
+            for (int c = 0; c < vGrid[0].Length; c++)
+            {
+                //Merge 
+                lastValue[2] = -1;
+
+                for (int r = 0; r<vGrid.Length; r++)
+                {
+
+                    if (vGrid[r][c] == lastValue[2])
+                    {
+                        //Combine
+                        var lr = lastValue[0];
+                        var lc = lastValue[1];
+
+                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
+                        vGrid[r][c] = 0;
+                        lastValue[2] = -1;
+                        madeChanges = true;
+
+                    }
+                    else if (vGrid[r][c] > 0)
+                    {
+                        //No match, update value
+                        lastValue[0] = r;
+                        lastValue[1] = c;
+                        lastValue[2] = vGrid[r][c];
+                    }
+                }
+
+                //Move
+                for (int r = 0; r<vGrid.Length; r++)
+                {
+                    if (vGrid[r][c] > 0)
+                    {
+                        var newRow = GetEmptyRowSpace(c, 1);
+                        if (newRow > -1)
+                        {
+                            vGrid[newRow][c] = vGrid[r][c];
+                            vGrid[r][c] = 0;
+                            madeChanges = true;
+                        }
+                    }
+                }
+            }
+
+            return madeChanges;
         }
 
         public bool MoveTilesDown()
         {
-            return true;
+            int[] lastValue = new int[] { 0, 0, -1 };
+            var madeChanges = false;
+
+            for (int c = 0; c < vGrid[0].Length; c++)
+            {
+                //Merge 
+                lastValue[2] = -1;
+
+                for (int r = vGrid.Length - 1; r >= 0; r--)
+                {
+
+                    if (vGrid[r][c] == lastValue[2])
+                    {
+                        //Combine
+                        var lr = lastValue[0];
+                        var lc = lastValue[1];
+
+                        vGrid[lr][lc] = vGrid[lr][lc] * 2;
+                        vGrid[r][c] = 0;
+                        lastValue[2] = -1;
+                        madeChanges = true;
+
+                    }
+                    else if (vGrid[r][c] > 0)
+                    {
+                        //No match, update value
+                        lastValue[0] = r;
+                        lastValue[1] = c;
+                        lastValue[2] = vGrid[r][c];
+                    }
+                }
+
+                //Move
+                for (int r = vGrid.Length - 1; r >= 0; r--)
+                {
+                    if (vGrid[r][c] > 0)
+                    {
+                        var newRow = GetEmptyRowSpace(c, -1);
+                        if (newRow > -1)
+                        {
+                            vGrid[newRow][c] = vGrid[r][c];
+                            vGrid[r][c] = 0;
+                            madeChanges = true;
+                        }
+                    }
+                }
+            }
+
+            return madeChanges;
         }
 
         public bool MoveTilesLeft()
@@ -192,10 +288,30 @@ namespace _2048Game
             
             for (int c = start;  c!=end; c+=direction)
             {
-                Console.WriteLine(c);
                 if (vGrid[row][c] == 0)
                 {
                     return c;
+                }
+            }
+            return -1;
+        }
+
+        private int GetEmptyRowSpace(int col, int direction)
+        {
+            var start = 0;
+            var end = vGrid.Length - 1;
+
+            if (direction < 0)
+            {
+                start = vGrid.Length - 1;
+                end = 0;
+            }
+
+            for (int r = start; r != end; r += direction)
+            {
+                if (vGrid[r][col] == 0)
+                {
+                    return r;
                 }
             }
             return -1;
