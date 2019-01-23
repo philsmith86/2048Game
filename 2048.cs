@@ -112,33 +112,33 @@ namespace _2048Game
 
         private void Game_KeyPress(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyChar.ToString())
+            switch (e.KeyChar.ToString().ToLower())
             {
                 case "w":
-                    if (gameManager.MoveTilesUp())
+                    if (gameManager.MoveTilesVertical(false))
                     {
                         gameManager.AddRandomTile();
                         UpdateUi();
                     }
                     break;
                 case "s":
-                    if (gameManager.MoveTilesDown())
+                    if (gameManager.MoveTilesVertical(true))
                     {
                         gameManager.AddRandomTile();
                         UpdateUi();
                     }
                     break;
                 case "a":
-                    if (gameManager.MoveTilesLeft())
+                    if (gameManager.MoveTilesHorizontal(true))
                     {
                         gameManager.AddRandomTile();
                         UpdateUi();
                     }
                     break;
                 case "d":
-                    if (gameManager.MoveTilesRight())
+                    if (gameManager.MoveTilesHorizontal(false))
                     {
-                        gameManager.AddRandomTile();
+                        gameManager.AddRandomTile(); 
                         UpdateUi();
                     }
                     break;

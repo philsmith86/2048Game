@@ -101,20 +101,29 @@ namespace _2048Game
             return vGrid;
         }
 
-        //Moves tiles in the specified direction
-        public bool MoveTilesUp(bool simulate = false)
+        public bool MoveTilesVertical(bool isDown, bool simulate = false)
         {
-
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
             var grid = GetGridForGameLogic(simulate);
+
+            var start = 0;
+            var end = grid[0].Length;
+            var direction = 1;
+
+            if (isDown)
+            {
+                start = grid[0].Length - 1;
+                end = -1;
+                direction = -1;                
+            }
 
             for (int c = 0; c < grid[0].Length; c++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int r = 0; r<grid.Length; r++)
+                for (int r = start; r != end; r+=direction)
                 {
 
                     if (grid[r][c] == lastValue[2])
@@ -141,12 +150,23 @@ namespace _2048Game
                 }
 
                 //Move
-                for (int r = 0; r<grid.Length; r++)
+                for (int r = start; r!=end; r+=direction)
                 {
                     if (grid[r][c] > 0)
                     {
-                        var newRow = GetEmptyRowSpace(grid, c, 1);
-                        if (newRow > -1 && newRow <r)
+                        var newRow = GetEmptyRowSpace(grid, c, direction);
+                        var updatePosition = false;
+
+                        if (isDown && newRow > r)
+                        {
+                            updatePosition = true;
+                            
+                        } else if (!isDown && newRow > -1 && newRow < r)
+                        {
+                            updatePosition = true;
+                        }
+
+                        if (updatePosition)
                         {
                             grid[newRow][c] = grid[r][c];
                             grid[r][c] = 0;
@@ -159,74 +179,29 @@ namespace _2048Game
             return madeChanges;
         }
 
-        public bool MoveTilesDown(bool simulate = false)
+        public bool MoveTilesHorizontal(bool goLeft, bool simulate = false)
         {
             int[] lastValue = new int[] { 0, 0, -1 };
             var madeChanges = false;
             var grid = GetGridForGameLogic(simulate);
 
-            for (int c = 0; c < grid[0].Length; c++)
+            var start = grid.Length - 1;
+            var end = -1;
+            var direction = -1;
+
+            if (goLeft)
             {
-                //Merge 
-                lastValue[2] = -1;
-
-                for (int r = grid.Length - 1; r >= 0; r--)
-                {
-
-                    if (grid[r][c] == lastValue[2])
-                    {
-                        //Combine
-                        var lr = lastValue[0];
-                        var lc = lastValue[1];
-
-                        grid[lr][lc] = grid[lr][lc] * 2;
-                        grid[r][c] = 0;
-                        lastValue[2] = -1;
-                        madeChanges = true;
-
-                        UpdatePlayerScore(grid[lr][lc]);
-
-                    }
-                    else if (grid[r][c] > 0)
-                    {
-                        //No match, update value
-                        lastValue[0] = r;
-                        lastValue[1] = c;
-                        lastValue[2] = grid[r][c];
-                    }
-                }
-
-                //Move
-                for (int r = grid.Length - 1; r >= 0; r--)
-                {
-                    if (grid[r][c] > 0)
-                    {
-                        var newRow = GetEmptyRowSpace(grid, c, -1);
-                        if (newRow > r)
-                        {
-                            grid[newRow][c] = grid[r][c];
-                            grid[r][c] = 0;
-                            madeChanges = true;
-                        }
-                    }
-                }
+                start = 0;
+                end = grid.Length;
+                direction = 1;
             }
-
-            return madeChanges;
-        }
-
-        public bool MoveTilesLeft(bool simulate = false)
-        {
-            int[] lastValue = new int[] { 0, 0, -1 };
-            var madeChanges = false;
-            var grid = GetGridForGameLogic(simulate);
 
             for (int r = 0; r < grid.Length; r++)
             {
                 //Merge 
                 lastValue[2] = -1;
 
-                for (int c = 0; c<grid.Length; c++)
+                for (int c = start; c != end; c+=direction)
                 {
 
                     if (grid[r][c] == lastValue[2])
@@ -253,68 +228,23 @@ namespace _2048Game
                 }
 
                 //Move
-                for (int c =0; c<grid.Length; c++)
+                for (int c = start; c != end; c+=direction)
                 {
                     if (grid[r][c] > 0)
                     {
-                        var newCol = GetEmptyColumnSpace(grid, r, 1);
-                        if (newCol > -1 && newCol<c)
+                        var newCol = GetEmptyColumnSpace(grid, r, direction);
+                        var updatePosition = false;                       
+
+                        if (!goLeft && newCol > c)
                         {
-                            grid[r][newCol] = grid[r][c];
-                            grid[r][c] = 0;
-                            madeChanges = true;
+                            updatePosition = true;
                         }
-                    }
-                }
-            }
+                        else if (goLeft && newCol > -1 && newCol < c)
+                        {
+                            updatePosition = true;
+                        }
 
-            return madeChanges;
-        }
-
-        public bool MoveTilesRight(bool simulate = false)
-        {
-            int[] lastValue = new int[] { 0, 0, -1 };
-            var madeChanges = false;
-            var grid = GetGridForGameLogic(simulate);
-
-            for (int r = 0; r < grid.Length; r++)
-            {
-                //Merge 
-                lastValue[2] = -1;
-
-                for (int c = grid.Length - 1; c >= 0; c--)
-                {
-
-                    if (grid[r][c] == lastValue[2])
-                    {
-                        //Combine
-                        var lr = lastValue[0];
-                        var lc = lastValue[1];
-
-                        grid[lr][lc] = grid[lr][lc] * 2;
-                        grid[r][c] = 0;
-                        lastValue[2] = -1;
-                        madeChanges = true;
-
-                        UpdatePlayerScore(grid[lr][lc]);
-
-                    }
-                    else if (grid[r][c] > 0)
-                    {
-                        //No match, update value
-                        lastValue[0] = r;
-                        lastValue[1] = c;
-                        lastValue[2] = grid[r][c];
-                    }
-                }
-
-                //Move
-                for (int c = grid.Length - 1; c >= 0; c--)
-                {
-                    if (grid[r][c] > 0)
-                    {
-                        var newCol = GetEmptyColumnSpace(grid, r, -1);
-                        if (newCol > c)
+                        if (updatePosition)
                         {
                             grid[r][newCol] = grid[r][c];
                             grid[r][c] = 0;
@@ -330,12 +260,12 @@ namespace _2048Game
         private int GetEmptyColumnSpace(int[][] grid, int row, int direction)
         {
             var start = 0;
-            var end = grid[row].Length-1;
+            var end = grid[row].Length;
 
             if (direction < 0)
             {
                 start = grid[row].Length - 1;
-                end = 0;
+                end = -1;
             }
             
             for (int c = start;  c!=end; c+=direction)
@@ -391,7 +321,8 @@ namespace _2048Game
 
         public bool CanMakeNextMove()
         {
-            return MoveTilesDown(true) || MoveTilesUp(true) || MoveTilesLeft(true) || MoveTilesRight(true);
+            return MoveTilesVertical(true, true) || MoveTilesVertical(false, true) || 
+                MoveTilesHorizontal(true, true) || MoveTilesHorizontal(false, true);
         }
     }
 }
